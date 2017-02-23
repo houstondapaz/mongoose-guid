@@ -12,13 +12,13 @@ var ProductSchema = Schema({
 ProductSchema.set('toObject', { getters: true });
 ProductSchema.set('toJSON', { getters: true });
 
-var Product = mongoose.model('_Product', ProductSchema);
+var Product = mongoose.model('products', ProductSchema);
 
 describe('mongoose-guid', function () {
     var val = GUID.value();
 
     before(function () {
-        return mongoose.connect('')
+        return mongoose.connect('mongodb://127.0.0.1:27017/tests')
     })
 
     after(function (cb) {
@@ -29,21 +29,23 @@ describe('mongoose-guid', function () {
 
     it('should cast guid strings to binary', function () {
         var product = new Product({
-            _id: val,
             name: 'Some product'
         });
 
-        (product._doc._id._bsontype == 'Binary').should.equal(true);
-        (product._doc._id.sub_type == 3).should.equal(true);
+        product._doc._id.sub_type.should.equal(3);
+        product._doc._id._bsontype.should.equal('Binary');
     });
 
     it('should convert back to text with toObject()', function () {
-        var product = new Product({
+        let val = GUID.value();
+        let product = new Product({
             _id: val,
             name: 'Some product'
         });
-        var productObject = product.toObject();
-        (productObject._id).should.equal(val);
+
+        let productObject = product.toObject();
+        productObject._id.should.equal(val)
+            .and.not.equal(product._doc._id);
     });
 
     it('should save without errors', function (cb) {
@@ -56,7 +58,7 @@ describe('mongoose-guid', function () {
 
     it('should be found correctly with .find()', function (cb) {
         Product.findOne({ _id: val }, function (err, product) {
-            (product).should.not.be.null;
+            product.should.not.be.null;
             var productObject = product.toObject();
             (productObject._id).should.equal(val);
             cb(err);
@@ -90,7 +92,7 @@ describe('mongoose-guid', function () {
         PhotoSchema.set('toObject', { getters: true });
         PhotoSchema.set('toJSON', { getters: true });
 
-        var Photo = mongoose.model('_Photo', PhotoSchema);
+        var Photo = mongoose.model('photos', PhotoSchema);
 
         before(function (cb) {
             var photo = new Photo({
@@ -108,8 +110,15 @@ describe('mongoose-guid', function () {
 
         it('should work', function (cb) {
             Photo.findById(val).exec(function (err, photo) {
-                (photo.pets).should.exist;
-                (photo.pets[0].name).should.equal('Sammy');
+                photo.pets.should.exist;
+                photo.pets.should.be.instanceof(Array);
+
+                let pet = photo.pets[0];
+                pet._doc._id.sub_type.should.equal(3);
+                pet._doc._id._bsontype.should.equal('Binary');
+
+                pet._id.should.have.lengthOf(GUID.value().length);
+
                 cb(err);
             });
         });
