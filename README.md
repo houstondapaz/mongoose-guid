@@ -1,6 +1,6 @@
 # mongoose-guid
 GUID type for mongoose
-
+[![bitHound Overall Score](https://www.bithound.io/github/houstondapaz/mongoose-guid/badges/score.svg)](https://www.bithound.io/github/houstondapaz/mongoose-guid)
 # Mongoose GUID Data type
 
 ## Why
