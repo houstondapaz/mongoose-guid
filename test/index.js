@@ -141,23 +141,11 @@ describe('mongoose-guid', function () {
 
         var Required = mongoose.model('required', requiredSchema);
 
-        // before(function (cb) {
-        //     var obj = new Required();
-
-        //     obj.save(cb);
-        // });
-
-        // after(function (cb) {
-        //     obj.remove(cb);
-        // });
-
-
-
         it('assert save throw required errors', function (cb) {
             let required = new Required();
             required.guid = null;
             required.save(function (error) {
-                assert.equal(error.errors['guid'].message,
+                assert.equal(error.errors.guid.message,
                     'Path `guid` is required.');
 
                 cb();
@@ -170,7 +158,7 @@ describe('mongoose-guid', function () {
             required.guid = 2;
 
             required.save(function (error) {
-                assert.equal(error.errors['guid'].message,
+                assert.equal(error.errors.guid.message,
                     'Cast to Buffer failed for value "2" at path "guid"');
 
                 cb();
