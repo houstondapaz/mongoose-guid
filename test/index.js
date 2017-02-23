@@ -2,6 +2,7 @@
 const mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     should = require('chai').should(),
+    assert = require('chai').assert,
     GUID = require('../index');
 
 var ProductSchema = Schema({
@@ -115,6 +116,64 @@ describe('mongoose-guid', function () {
                 pet._id.should.have.lengthOf(GUID.value().length);
 
                 cb(err);
+            });
+        });
+    });
+
+    describe('expections', function () {
+        let requiredSchema = Schema({
+            _id: { type: GUID.type, default: GUID.value },
+            guid: {
+                type: GUID.type,
+                required: true
+            },
+            guid2: {
+                type: GUID.type,
+            },
+            guid3: {
+                type: GUID.type,
+                min: 10
+            }
+        }, { id: false });
+
+        requiredSchema.set('toObject', { getters: true });
+        requiredSchema.set('toJSON', { getters: true });
+
+        var Required = mongoose.model('required', requiredSchema);
+
+        // before(function (cb) {
+        //     var obj = new Required();
+
+        //     obj.save(cb);
+        // });
+
+        // after(function (cb) {
+        //     obj.remove(cb);
+        // });
+
+
+
+        it('assert save throw required errors', function (cb) {
+            let required = new Required();
+            required.guid = null;
+            required.save(function (error) {
+                assert.equal(error.errors['guid'].message,
+                    'Path `guid` is required.');
+
+                cb();
+            });
+
+        });
+
+        it('assert save throw cast buffer failed', function (cb) {
+            let required = new Required();
+            required.guid = 2;
+
+            required.save(function (error) {
+                assert.equal(error.errors['guid'].message,
+                    'Cast to Buffer failed for value "2" at path "guid"');
+
+                cb();
             });
         });
     });
