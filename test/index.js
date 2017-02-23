@@ -98,7 +98,7 @@ describe('mongoose-guid', function () {
             });
 
             photo.save(cb);
-        })
+        });
 
         after(function (cb) {
             Photo.remove(cb);
@@ -106,7 +106,6 @@ describe('mongoose-guid', function () {
 
         it('should work', function (cb) {
             Photo.findById(val).exec(function (err, photo) {
-                photo.pets.should.exist;
                 photo.pets.should.be.instanceof(Array);
 
                 let pet = photo.pets[0];
