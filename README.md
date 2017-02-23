@@ -1,9 +1,7 @@
 # mongoose-guid
 GUID type for mongoose
 
-
 # Mongoose GUID Data type
-========================
 
 ## Why
 In a .NET project? Yeah .NET GUID is a UUID V3 and node do not have support to this!

@@ -18,8 +18,8 @@ describe('mongoose-guid', function () {
     var val = GUID.value();
 
     before(function () {
-        return mongoose.connect('mongodb://127.0.0.1:27017/tests')
-    })
+        return mongoose.connect('mongodb://127.0.0.1:27017/tests');
+    });
 
     after(function (cb) {
         Product.remove({}, function () {
@@ -56,22 +56,18 @@ describe('mongoose-guid', function () {
         product.save(cb);
     });
 
+    function testOnFind(err, product, cb) {
+        var productObject = product.toObject();
+        productObject._id.should.equal(val);
+        cb(err);
+    }
+
     it('should be found correctly with .find()', function (cb) {
-        Product.findOne({ _id: val }, function (err, product) {
-            product.should.not.be.null;
-            var productObject = product.toObject();
-            (productObject._id).should.equal(val);
-            cb(err);
-        });
+        Product.findOne({ _id: val }, (err, product) => testOnFind(err, product, cb));
     });
 
     it('should be found correctly with .findById()', function (cb) {
-        Product.findById(val, function (err, product) {
-            (product).should.not.be.null;
-            var productObject = product.toObject();
-            (productObject._id).should.equal(val);
-            cb(err);
-        });
+        Product.findById(val, (err, product) => testOnFind(err, product, cb));
     });
 
     describe('arrays', function () {
