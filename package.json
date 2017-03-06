@@ -1,10 +1,11 @@
 {
   "name": "mongoose-guid",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "GUID type for mongoose",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha"
   },
   "repository": {
     "type": "git",
