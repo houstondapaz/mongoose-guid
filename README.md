@@ -2,6 +2,9 @@
 GUID type for mongoose
 
 [![bitHound Overall Score](https://www.bithound.io/github/houstondapaz/mongoose-guid/badges/score.svg)](https://www.bithound.io/github/houstondapaz/mongoose-guid)
+[![Coverage Status](https://coveralls.io/repos/github/houstondapaz/mongoose-guid/badge.svg?branch=master)](https://coveralls.io/github/houstondapaz/mongoose-guid?branch=master)
+[![Build Status](https://travis-ci.org/houstondapaz/mongoose-guid.svg?branch=master)](https://travis-ci.org/houstondapaz/mongoose-guid)
+
 # Mongoose GUID Data type
 
 ## Why
