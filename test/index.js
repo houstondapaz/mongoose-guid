@@ -28,6 +28,15 @@ describe('mongoose-guid', function () {
         });
     });
 
+    it('for each object the _id is different', function () {
+        var product = new Product({ name: 'Some product' }).toObject();
+        var product2 = new Product({ name: 'Some product' }).toObject();
+
+        assert.notEqual(product._id, product2._id);
+        assert.equal(product.name, product2.name);
+    });
+
+
     it('should cast guid strings to binary', function () {
         var product = new Product({
             name: 'Some product'
