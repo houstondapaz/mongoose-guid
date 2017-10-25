@@ -13,11 +13,11 @@ In a .NET project? Yeah .NET GUID is a UUID V3 and node do not have support to t
 ## How to use
 
 ```JavaScript
-var GUID = require('mongoose-guid');
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const GUID = require('mongoose-guid');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var ProductSchema = Schema({
+const ProductSchema = Schema({
   _id: { type: GUID.type, default: GUID.value },
   name: String
 }, { id: false });
@@ -25,9 +25,16 @@ var ProductSchema = Schema({
 ProductSchema.set('toObject', {getters: true});
 ProductSchema.set('toJSON', {getters: true});
 
-var Product = mongoose.model('Product', ProductSchema);
-
-
+const Product = mongoose.model('Product', ProductSchema);
 ```
 
+## Arrays
+
+To create arrays of GUIDs use the property ```Array```
+
+```javascript
+const ProductSchema = Schema({
+  _id: { type: GUID.type, default: GUID.value },
+  ids: GUID.Array
+}, { id: false });
 ```
