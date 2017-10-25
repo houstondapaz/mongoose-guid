@@ -1,6 +1,6 @@
 {
   "name": "mongoose-guid",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "GUID type for mongoose",
   "main": "index.js",
   "scripts": {
