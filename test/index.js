@@ -83,7 +83,7 @@ describe('mongoose-guid', function () {
     describe('arrays', function () {
         var PetSchema = Schema({
             _id: { type: GUID.type, default: GUID.value },
-            name: String,
+            name: String
         }, { id: false });
 
         PetSchema.set('toObject', { getters: true });
@@ -92,19 +92,21 @@ describe('mongoose-guid', function () {
         var PhotoSchema = Schema({
             _id: { type: GUID.type, default: GUID.value },
             filename: String,
-            pets: [PetSchema]
+            pets: [PetSchema],
+            petIds: GUID.Array
         }, { id: false });
 
         PhotoSchema.set('toObject', { getters: true });
         PhotoSchema.set('toJSON', { getters: true });
 
-        var Photo = mongoose.model('photos', PhotoSchema);
+        const Photo = mongoose.model('photos', PhotoSchema);
 
         before(function (cb) {
-            var photo = new Photo({
+            const photo = new Photo({
                 _id: val,
                 filename: 'photo.jpg',
-                pets: [{ name: 'Sammy' }]
+                pets: [{ name: 'Sammy' }],
+                petIds:[GUID.value()]
             });
 
             photo.save(cb);
@@ -123,6 +125,20 @@ describe('mongoose-guid', function () {
                 pet._doc._id._bsontype.should.equal('Binary');
 
                 pet._id.should.have.lengthOf(GUID.value().length);
+
+                cb(err);
+            });
+        });
+
+        it('should have array of ids', function (cb) {
+            Photo.findById(val).exec(function (err, photo) {
+                photo.petIds.should.be.instanceof(Array);
+
+                let petId = photo.petIds[0];
+                photo._doc.petIds[0].sub_type.should.equal(3);
+                photo._doc.petIds[0]._bsontype.should.equal('Binary');
+
+                petId.should.have.lengthOf(GUID.value().length);
 
                 cb(err);
             });
